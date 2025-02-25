@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <title>All Venues</title>
+</head>
+<body>
+  <div layout:fragment="content">  
+    <h1>All Venues</h1>
+    
+    <form th:action="@{/venues/search}" class="form-inline" method="get">
+      <input type="text" class="form-control" name="query" placeholder="Search for venues" th:value="${searchQuery}">
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <br>
+    
+    <br>
+
+    <h3>Venues</h3>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th><i class="fa-solid fa-building"></i> Venue</th>
+          <th><i class="fa-solid fa-map-marker-alt"></i> Address</th>
+          <th><i class="fa-regular fa-envelope"></i> Postcode</th>
+          <th><i class="fa-solid fa-users"></i> Capacity</th>
+          <th><i class="fa-solid"></i> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="v : ${searchResults}">
+          <td th:text="${v.name}">Venue</td>
+          <td th:text="${v.address != null and #strings.length(v.address) > 15} ? ${#strings.substring(v.address, 0, 15)} + '...' : ${v.address}">Venue Address</td>
+          <td th:text=${{v.postCode}}>Postal Code</td>
+          <td th:text="${{v.capacity}}">Venue Capacity</td>  
+          <td>
+            <a class="btn btn-primary" role="button" th:href="@{'/venues/' + ${v.id}}"><i class="fa-solid" aria-hidden="true"></i>Details</a>
+            <a sec:authorize="hasRole('EVENT_ORGANISER')" class="btn btn-warning" role="button" th:href="@{'/venues/edit/' + ${v.id}}"><i class="fas fa-edit" aria-hidden="true"></i></a> 
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+    <div sec:authorize="hasRole('EVENT_ORGANISER')">
+		<p><a class="btn btn-primary" role="button" href="/venues/new"><i class="fa-solid fa-plus" aria-hidden="true"></i> Add a new venue</a></p>
+  	</div>
+  </div>
+</body>
+</html>

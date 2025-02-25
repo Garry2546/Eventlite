@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <title>All events</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <div th:if="${not #strings.isEmpty(ok_message)}" class="alert alert-success">
+        <p th:text="${ok_message}"></p>
+    </div>
+  
+    <h1>All events</h1>
+    
+    <form th:action="@{/events/search}" class="form-inline" method="get">
+      <input type="text" class="form-control" name="query" placeholder="Search for events" th:value="${searchQuery}">
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <br>
+
+	<h3>Upcoming events</h3>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th><i class="fa-solid fa-bolt"></i> Event</th>
+          <th><i class="fa-solid fa-calendar"></i> Date</th>
+          <th><i class="fa-solid fa-clock"></i> Time</th>
+          <th><i class="fa-solid fa-building"></i> Venue</th>
+          <th><i class="fa-solid"></i> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="e : ${upcomingEvents}">
+          <td th:text="${e.name}">My Event</td>
+          <td th:text="${{e.date}}">Event date</td>
+          <td th:text="${{e.time}}">Event time</td>
+          <td th:text="${e.venue.name}">Event venue</td>
+          <td>
+			  <a class="btn btn-primary" role="button" th:href="@{'/events/' + ${e.id}}"><i class="fa-solid" aria-hidden="true"></i> Details</a>
+          	  <a sec:authorize="hasRole('EVENT_ORGANISER')" class="btn btn-warning" role="button" th:href="@{'/events/edit/' + ${e.id}}"><i class="fas fa-edit" aria-hidden="true"></i></a>
+          </td>
+<!-- 		  <td sec:authorize="hasRole('EVENT_ORGANISER')">
+		    <form th:action="@{/events/{id}(id=${e.id})}" method="post">
+		      <input type="hidden" name="_method" value="delete"/>
+		      <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this event?')">
+		        <i class="fa-solid fa-trash" aria-hidden="true"></i> Delete
+		      </button>
+		    </form>
+		  </td> -->
+        </tr>
+      </tbody>
+    </table>
+    <h3>Previous events</h3>
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th><i class="fa-solid fa-bolt"></i> Event</th>
+          <th><i class="fa-solid fa-calendar"></i> Date</th>
+          <th><i class="fa-solid fa-clock"></i> Time</th>
+          <th><i class="fa-solid fa-building"></i> Venue</th>
+          <th><i class="fa-solid"></i> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="e : ${pastEvents}">
+          <td th:text="${e.name}">My Event</td>
+          <td th:text="${{e.date}}">Event date</td>
+          <td th:text="${{e.time}}">Event time</td>
+          <td th:text="${e.venue.name}">Event venue</td>
+          <td><a class="btn btn-primary" role="button" th:href="@{'/events/' + ${e.id}}"><i class="fa-solid" aria-hidden="true"></i>Details</a>
+          	  <a sec:authorize="hasRole('EVENT_ORGANISER')" class="btn btn-warning" role="button" th:href="@{'/events/edit/' + ${e.id}}"><i class="fas fa-edit" aria-hidden="true"></i></a>
+          </td>
+     	  <!-- <td sec:authorize="hasRole('EVENT_ORGANISER')">
+		    <form th:action="@{/events/{id}(id=${e.id})}" method="post">
+		      <input type="hidden" name="_method" value="delete"/>
+		      <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this event?')">
+		        <i class="fa-solid fa-trash" aria-hidden="true"></i> Delete
+		      </button>
+		    </form>
+		  </td> -->
+        </tr>
+      </tbody>
+    </table>
+	
+	<div sec:authorize="hasRole('EVENT_ORGANISER')">
+	<p>
+      <a class="btn btn-primary" role="button" href="/events/new"><i class="fa-solid fa-plus" aria-hidden="true"></i> Add a new event</a>
+  	</p>
+  	</div>
+
+  </div>
+</body>
+</html>

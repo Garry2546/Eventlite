@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/default}">
+<head>
+  <title>New Event</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>Add A New Event</h1>
+    
+    <form action="#" th:action="@{/events}" th:object="${event}" method="post">
+      <div class="form-group" th:classappend="${#fields.hasErrors('name')}? has-error">
+        <label for="name">Event Name</label>
+        <input class="form-control" type="text" name="name" id="name" placeholder="Gaming Session" autofocus="autofocus" />
+        <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">errors</p>
+      </div>
+      
+  	  <div class="form-group" th:classappend="${#fields.hasErrors('date')}? 'has-error'">
+        <label for="date">Event Date</label>
+        <input class="form-control" type="date" name="date" id="date" th:value="*{date}" placeholder="YYYY-MM-DD" />
+        <p class="text-danger" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Event Date Error</p>
+      </div>
+       
+      <div class="form-group" th:classappend="${#fields.hasErrors('time')}? 'has-error'">
+        <label for="time">Event Time</label>
+        <input class="form-control" type="time" name="time" id="time" th:value="*{time}" placeholder="HH:MM" />
+        <p class="text-danger" th:if="${#fields.hasErrors('time')}" th:errors="*{time}">Event Time Error</p>
+      </div>
+
+      <div class="form-group" th:classappend="${#fields.hasErrors('venue')}? 'has-error'">
+        <label for="venue.name">Venue</label>
+        <input class="form-control" type="text" th:field="*{venue.name}" id="venue.name" placeholder="Venue" autofocus="autofocus"/>
+        <p class="text-danger" th:if="${#fields.hasErrors('venue')}" th:errors="*{venue}">Venue Error</p>
+      </div>
+      
+      <div class="form-group" th:classappend="${#fields.hasErrors('description')}? 'has-error'">
+        <label for="description">Description</label>
+        <textarea class="form-control" name="description" id="description" th:text="*{description}" placeholder="Event Description"></textarea>
+        <p class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error</p>
+      </div>
+    
+      <button class="btn btn-primary" type="submit"><i class="fa-solid fa-bookmark" aria-hidden="true"></i> Save</button>
+      <a class="btn btn-warning" role="button" href="/events/search"><i class="fa-solid fa-ban" aria-hidden="true"></i> Cancel</a>
+      
+    </form>
+  </div>
+</body>
+</html>

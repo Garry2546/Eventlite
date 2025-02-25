@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/default}">
+<head>
+  <title>New Venue</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>Create A New Venue</h1>
+    
+    <form action="#" th:action="@{/venues}" th:object="${venue}" method="post">
+      <div class="form-group" th:classappend="${#fields.hasErrors('name')}? has-error">
+        <label for="name">Venue Name</label>
+        <input class="form-control" type="text" name="name" id="name" placeholder="Venue Name" autofocus="autofocus" />
+        <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</p>
+      </div>
+
+      <div class="form-group" th:classappend="${#fields.hasErrors('capacity')}? 'has-error'">
+        <label for="capacity">Capacity</label>
+        <input class="form-control" type="number" th:field="*{capacity}" id="capacity" value="1" min="1" autofocus="autofocus"/>
+        <p class="text-danger" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}">Capacity Error</p>
+      </div>
+      
+      <div class="form-group" th:classappend="${#fields.hasErrors('address')}? 'has-error'">
+        <label for="address">Address</label>
+        <textarea class="form-control" name="address" id="address" th:text="*{address}" placeholder="Address"></textarea>
+        <p class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address Error</p>
+      </div>
+      
+      <div class="form-group" th:classappend="${#fields.hasErrors('postCode')}? has-error">
+        <label for="postCode">Postcode</label>
+        <input class="form-control" type="text" name="postCode" id="postCode" placeholder="Postcode" autofocus="autofocus" />
+        <p class="text-danger" th:if="${#fields.hasErrors('postCode')}" th:errors="*{postCode}">Postcode Error</p>
+      </div>
+    
+      <button class="btn btn-primary" type="submit"><i class="fa-solid fa-bookmark" aria-hidden="true"></i> Save</button>
+      <a class="btn btn-warning" role="button" href="/venues/search"><i class="fa-solid fa-ban" aria-hidden="true"></i> Cancel</a>
+      
+    </form>
+  </div>
+</body>
+</html>
